@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+  	Googlemaps
+  </title>
+  <%= Gon::Base.render_data %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>  
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtsiQECJ81tS_kZhfGdaBZggbO0oGVsCU&callback=initMap" async defer></script>
+</body>
+</html>
