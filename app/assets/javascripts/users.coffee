@@ -1,7 +1,4 @@
-
-@panning = (x) ->
-  initMap x
-  return
+map = undefined
 
 @initMap = (c) ->
   loc = []
@@ -16,15 +13,16 @@
   myLatLng = 
     lat: 20.5937
     lng: 78.9629
-  minZoomLevel = 2
+  minZoomLevel = 3
   map = new (google.maps.Map)(document.getElementById('map'),
     zoom: 4
-    draggable: c
-    scrollwheel: c
-    zoomControl: c
+    draggable: true
+    scrollwheel: true
+    zoomControl: true
     minZoom: minZoomLevel
     setMaxZoom: 11
-    center: myLatLng)
+    center: myLatLng
+    gestureHandling: 'none')
   infoWindow = new (google.maps.InfoWindow)(map: map)
   prev_infowindow = false
   marker = undefined
@@ -61,10 +59,13 @@
   map.addListener 'zoom_changed', ->
     console.log map.getZoom() 
     return
+  
+  coordsDiv = document.getElementById('coords')
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push coordsDiv
 
 
-  strictBounds = new (google.maps.LatLngBounds)(new (google.maps.LatLng)(-65, -140), new (google.maps.LatLng)(79.7888, 140))
-  google.maps.event.addListener map, 'dragend', ->
+  strictBounds = new (google.maps.LatLngBounds)(new (google.maps.LatLng)(-75, -180), new (google.maps.LatLng)(83, 180))
+  google.maps.event.addListener map, 'bounds_changed', ->
     if strictBounds.contains(map.getCenter())
       return
     c = map.getCenter()
@@ -112,4 +113,24 @@ handleLocationError = (browserHasGeolocation, infoWindow, pos) ->
     infoWindow.close()
     return
   ), 3000
+  return
+@panning = (x) ->
+  if !x
+    map.setOptions
+      draggable: false
+  else
+    map.setOptions
+      draggable: true
+  return
+@zooming = (x) ->
+  if !x
+    map.setOptions
+      zoomControl: false
+      scrollwheel: false
+      disableDoubleClickZoom: true
+  else
+    map.setOptions
+      zoomControl: true
+      scrollwheel: true
+      disableDoubleClickZoom: false
   return
